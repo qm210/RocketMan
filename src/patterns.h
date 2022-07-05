@@ -49,7 +49,7 @@ struct RainbowOscillation : PatternBase
 {
 public:
     void render(int strip_index) override {
-        int step = count_ms / 100;
+        int step = count_ms / 20;
         int somepixel = triangle_modulo(step, NUM_LEDS);
         leds[strip_index][somepixel] = CHSV(hue, 255, 255);
 
@@ -65,7 +65,7 @@ private:
 struct WhiteGlitter : PatternBase
 {
 public:
-    uint8_t spawn_threshold = 25;
+    uint8_t spawn_threshold = 50;
 
     void render(int strip_index) override {
         if (random8() < spawn_threshold) {

@@ -1,10 +1,21 @@
 #include <Arduino.h>
+// #include <WiFi.h>
+// #include <AsyncElegantOTA.h>
+// #include <AsyncTCP.h>
+// #include <ESPAsyncWebServer.h>
 #include <FastLED.h>
 #include <memory>
 #include "main.h"
 #include "utils.h"
 #include "patterns.h"
+#include "PatternBase.h"
 #include "RocketManager.h"
+
+/*
+const char* ssid = "ROCKET_NET";
+const char* password = "rakete";
+AsyncWebServer server(80);
+*/
 
 unsigned long time_ms;
 
@@ -20,12 +31,40 @@ PatternBase* allPatterns[] = {
 
 RocketManager rocketManager;
 
+/*
+void setupOTA() {
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, password);
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "text/plain", "Hello dear sir.");
+  });
+
+  AsyncElegantOTA.begin(&server);    // Start ElegantOTA
+  server.begin();
+  Serial.println("HTTP server started");
+}
+*/
+
 void setup() {
+    // setupOTA(); // can't seem to manage right now
+
     FastLED.addLeds<LED_TYPE, PIN_DATA0, PIN_CLOCK0, COLOR_ORDER>(master_leds[0], NUM_LEDS);
-    //   FastLED.addLeds<LED_TYPE, PIN_DATA1, PIN_CLOCK1, COLOR_ORDER>(master_leds[1], NUM_LEDS);
-    //   FastLED.addLeds<LED_TYPE, PIN_DATA2, PIN_CLOCK2, COLOR_ORDER>(master_leds[2], NUM_LEDS);
-    //   FastLED.addLeds<LED_TYPE, PIN_DATA3, PIN_CLOCK3, COLOR_ORDER>(master_leds[3], NUM_LEDS);
-    //   FastLED.addLeds<LED_TYPE, PIN_DATA4, PIN_CLOCK4, COLOR_ORDER>(master_leds[4], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, PIN_DATA1, PIN_CLOCK1, COLOR_ORDER>(master_leds[1], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, PIN_DATA2, PIN_CLOCK2, COLOR_ORDER>(master_leds[2], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, PIN_DATA3, PIN_CLOCK3, COLOR_ORDER>(master_leds[3], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, PIN_DATA4, PIN_CLOCK4, COLOR_ORDER>(master_leds[4], NUM_LEDS);
 
     FastLED.setBrightness(GLOBAL_BRIGHTNESS);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 900);
@@ -36,6 +75,10 @@ void setup() {
 
     Serial.begin(115200);
     Serial.println("Start.");
+
+    theRainbowOscillation->brightness = 255;
+    theRainbowOscillation->fade_factor = 255;
+    theRainbowOscillation->frame_delay_ms = 3;
 
     rocketManager.setup();
 }
