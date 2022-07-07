@@ -2,7 +2,11 @@
 
 #include <Arduino.h>
 #include <Vector.h>
+#include <String.h>
 #include <Preferences.h>
+#include "utils.h"
+#include "patterns.h"
+#include "PatternBase.h"
 
 #include <BLEDevice.h>
 #include <BLEServer.h>
@@ -16,10 +20,6 @@
 
 #define BLE_DEVICE_NAME "ROCKET-MAN"
 
-enum RocketMessage {
-
-};
-
 class RocketManager
 {
 public:
@@ -29,10 +29,17 @@ public:
     void setup();
     void handleInput();
     void store(boolean force = false);
+    void setParameter(String target, int value);
 
     bool isConnected = false;
     bool wasConnected = false;
-    Vector<std::string> received;
+    Vector<String> received;
+
+    int dritters_uv_dutycycle;
+    RainbowOscillation *theRainbowOscillation;
+    WhiteGlitter *theWhiteGlitter;
+
+    PatternBase* allPatterns[2];
 
 private:
     Preferences preferences;

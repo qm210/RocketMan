@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PATTERNS_H
+#define PATTERNS_H
 
 #include <Arduino.h>
 #include <FastLED.h>
@@ -18,6 +19,7 @@ inline void apply_around(int center, int width, Func apply) {
 // TODO: intensity corrected colors
 #define GLOW_NEIGHBORS 10
 
+/*
 void sin_glow(CRGB leds[], double time) {
     auto center_pixel = NUM_LEDS * 0.5 * (1. + sin(10. * time));
     for (int k = -GLOW_NEIGHBORS; k <= GLOW_NEIGHBORS; k++) {
@@ -25,8 +27,8 @@ void sin_glow(CRGB leds[], double time) {
         if (pixel < 0 || pixel >= NUM_LEDS)
             continue;
 
-        auto intensity = exp(-(k*k) * 0.1);
-        leds[pixel] = CHSV(0, intensity * 255, 0);
+        auto intensity = 255 * exp(-(k*k) * 0.1);
+        leds[pixel] = CHSV(0, intensity, 0);
     }
 }
 
@@ -44,6 +46,7 @@ void red_glow(CRGB leds[]) {
         leds[c + k] = value;
     });
 }
+*/
 
 struct RainbowOscillation : PatternBase
 {
@@ -69,7 +72,9 @@ public:
 
     void render(int strip_index) override {
         if (random8() < spawn_threshold) {
-            leds[strip_index][ random16(NUM_LEDS) ] += CRGB::White;
+            leds[strip_index][random16(NUM_LEDS)] += CRGB::White;
         }
     }
 };
+
+#endif
